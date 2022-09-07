@@ -8,8 +8,20 @@ import {
   Routes,
   Route
 } from "react-router-dom";
+import Button from 'react-bootstrap/Button';
+import Profile from './About'
+import addBook from './addBook'
+
+
 
 class App extends React.Component {
+  
+
+
+  
+
+
+ 
   render() {
     return (
       <>
@@ -18,8 +30,18 @@ class App extends React.Component {
           <Routes>
             <Route 
               exact path="/"
-              element={<BestBooks />}
+              element= 
+              {
+                <>
+              
+              <BestBooks /> 
+              </>}
             >
+              <Route 
+              exact path="/profile"
+              element= {<Profile/>}
+              >
+              </Route>
             </Route>
             {/* PLACEHOLDER: add a route with a path of '/about' that renders the `About` component */}
           </Routes>

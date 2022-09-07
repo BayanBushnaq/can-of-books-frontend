@@ -1,4 +1,5 @@
 import React from "react";
+import Button from 'react-bootstrap/Button';
 import Carousel from "react-bootstrap/Carousel";
 import axios from "axios";
 
@@ -6,7 +7,11 @@ import axios from "axios";
 class BestBooks extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {books: []};}
+    this.state = {
+      show: false,
+      books: []
+    };
+  }
       
     
   
@@ -23,10 +28,44 @@ class BestBooks extends React.Component {
       });
   };
 
+  handleShowAddbook = ()=>{
+    this.setState ({
+      show : true
+    })
+  }
+
+  handleCloseAddbook = ()=>{
+    this.setState({
+      show : false
+    })
+  }
+
+ 
+ 
+
+  addBook = (event)=>{
+    event.preventDefault();
+    const obj ={
+       title : event.target.title.value,
+       description : event.target.description.value,
+       status : event.target.status.value
+    };
+
+    axios 
+    .post('http://localhost:3010/addBooks',obj)
+    .then(result =>{
+
+    })
+    .catch(err=>{
+      console.log(err);
+    })
+  }
+
   render() {
     /* TODO: render all the books in a Carousel */
     return ( 
       <>
+      {/* <Button variant="primary"   onClick={this.handleShowAddbook}>Add a book</Button> */}
       {this.state.books.length > 0 ? (
         <Carousel >
           {this.state.books.map(item => {
