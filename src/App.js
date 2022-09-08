@@ -10,7 +10,7 @@ import {
 } from "react-router-dom";
 import Button from 'react-bootstrap/Button';
 import Profile from './About'
-import addBook from './addBook'
+
 
 
 
@@ -32,10 +32,8 @@ class App extends React.Component {
               exact path="/"
               element= 
               {
-                <>
-              
               <BestBooks /> 
-              </>}
+              }
             >
               <Route 
               exact path="/profile"
