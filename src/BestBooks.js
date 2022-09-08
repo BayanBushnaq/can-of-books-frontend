@@ -44,8 +44,8 @@ class BestBooks extends React.Component {
   handleSubmit=(event)=>{
     event.preventDefault()
     console.log(event.target)
-    console.log("123456789")
-   alert('1')
+    
+   
    
     const obj={
         title :event.target.title.value,
