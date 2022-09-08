@@ -2,6 +2,7 @@ import React from "react";
 import Button from 'react-bootstrap/Button';
 import Carousel from "react-bootstrap/Carousel";
 import axios from "axios";
+import FormModal from './FormModal';
 
 
 class BestBooks extends React.Component {
@@ -13,11 +14,9 @@ class BestBooks extends React.Component {
     };
   }
       
-    
-  
-
   /* TODO: Make a GET request to your API to fetch all the books from the database  */
   componentDidMount = () => {
+    console.log("test") ;
     axios
       .get("http://localhost:3010/books")
       .then((result) => {
@@ -28,32 +27,40 @@ class BestBooks extends React.Component {
       });
   };
 
-  handleShowAddbook = ()=>{
-    this.setState ({
-      show : true
-    })
-  }
-
-  handleCloseAddbook = ()=>{
+  handleClose = ()=>{
     this.setState({
       show : false
     })
   }
 
- 
- 
-
   addBook = (event)=>{
     event.preventDefault();
-    const obj ={
-       title : event.target.title.value,
-       description : event.target.description.value,
-       status : event.target.status.value
-    };
+    this.setState({
+      show:true
+    })}
 
+  
+
+  handleSubmit=(event)=>{
+    event.preventDefault()
+    console.log(event.target)
+    console.log("123456789")
+   alert('1')
+   
+    const obj={
+        title :event.target.title.value,
+        description :event.target.description.value,
+        status: event.target.status.value
+       
+    }
+    
     axios 
     .post('http://localhost:3010/addBooks',obj)
-    .then(result =>{
+    .then((result) =>{
+      console.log("123456789dtfgjklhikujyhtrewetyuiu")
+       this.setState ({
+        books : result.data
+      })
 
     })
     .catch(err=>{
@@ -61,11 +68,12 @@ class BestBooks extends React.Component {
     })
   }
 
-  render() {
+  render(){
     /* TODO: render all the books in a Carousel */
     return ( 
       <>
-      {/* <Button variant="primary"   onClick={this.handleShowAddbook}>Add a book</Button> */}
+      <Button variant="primary" onClick={this.addBook}> Click Here to Add a book</Button>
+      <FormModal show={this.state.show} close={this.handleClose} handleSubmit={this.handleSubmit}/>
       {this.state.books.length > 0 ? (
         <Carousel >
           {this.state.books.map(item => {
@@ -82,23 +90,15 @@ class BestBooks extends React.Component {
                   <p>{item.description}</p>
                   <p>{item.status}</p>
                 </Carousel.Caption>
-              </Carousel.Item>
-
-            )
-          }
-          )}
-
+              </Carousel.Item>)} )}
 
         </Carousel>
 
       ) : (
         <h3>the book collection is empty.</h3>
       )}
-
-
-
 </>
         ) 
-    }}
+      } }
 
 export default BestBooks;
