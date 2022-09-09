@@ -51,8 +51,8 @@ class FormModal extends React.Component {
                   <option value="Reccomended To Me">Reccomended To Me</option>
                 </Form.Select>
               </ModalBody>
-              <Button type="submit">Submit form</Button><span> </span>
-              <Button  onClick={this.props.close}>close</Button>
+              <Button type="submit">ADD A Book</Button><span> </span>
+              <Button  onClick={this.props.close}>Close</Button>
             </Form>
           </Modal.Body>
         </Modal>
