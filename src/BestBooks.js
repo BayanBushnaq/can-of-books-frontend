@@ -1,22 +1,20 @@
 import React from "react";
-import Button from 'react-bootstrap/Button';
+import Button from "react-bootstrap/Button";
 import Carousel from "react-bootstrap/Carousel";
 import axios from "axios";
-import FormModal from './FormModal';
-
+import FormModal from "./FormModal";
 
 class BestBooks extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       show: false,
-      books: []
+      books: [],
     };
   }
-      
+
   /* TODO: Make a GET request to your API to fetch all the books from the database  */
   componentDidMount = () => {
-    console.log("test") ;
     axios
       .get("http://localhost:3010/books")
       .then((result) => {
@@ -27,78 +25,100 @@ class BestBooks extends React.Component {
       });
   };
 
-  handleClose = ()=>{
+  handleClose = () => {
     this.setState({
-      show : false
-    })
-  }
+      show: false,
+    });
+  };
 
-  addBook = (event)=>{
+  addBook = (event) => {
     event.preventDefault();
     this.setState({
-      show:true
-    })}
+      show: true,
+    });
+  };
 
-  
+  handleSubmit = (event) => {
+    event.preventDefault();
+    console.log(event.target);
 
-  handleSubmit=(event)=>{
-    event.preventDefault()
-    console.log(event.target)
-    
-   
-   
-    const obj={
-        title :event.target.title.value,
-        description :event.target.description.value,
-        status: event.target.status.value
-       
-    }
-    
-    axios 
-    .post('http://localhost:3010/addBooks',obj)
-    .then((result) =>{
-      console.log("123456789dtfgjklhikujyhtrewetyuiu")
-       this.setState ({
-        books : result.data
+    const obj = {
+      title: event.target.title.value,
+      description: event.target.description.value,
+      status: event.target.status.value,
+    };
+
+    axios
+      .post("http://localhost:3010/addBooks", obj)
+      .then((result) => {
+        console.log("123456789dtfgjklhikujyhtrewetyuiu");
+        this.setState({
+          books: result.data,
+        });
       })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
-    })
-    .catch(err=>{
-      console.log(err);
-    })
-  }
+ deleteBook = (id) => {
+    console.log(id);
+    axios
+      .delete(`http://localhost:3010/deleteBook/${id}`)
+      .then((result) => {
+        this.setState({
+          books: result.data
+        });
+        window.location.reload(true);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
-  render(){
+  render() {
     /* TODO: render all the books in a Carousel */
-    return ( 
+    return (
       <>
-      <Button variant="primary" onClick={this.addBook}> Click Here to Add a book</Button>
-      <FormModal show={this.state.show} close={this.handleClose} handleSubmit={this.handleSubmit}/>
-      {this.state.books.length > 0 ? (
-        <Carousel >
-          {this.state.books.map(item => {
-            return (
-
-              <Carousel.Item>
-                <img
-                  className="d-block w-100"
-                  src="https://cdn2.teebooks.com/3568-large_default/wall-bookshelves-45-x-15-cm-set-of-2.jpg"
-                  alt="First slide"
-                />
-                <Carousel.Caption style={{ color: "black" }}>
-                  <h3>{item.title}</h3>
-                  <p>{item.description}</p>
-                  <p>{item.status}</p>
-                </Carousel.Caption>
-              </Carousel.Item>)} )}
-
-        </Carousel>
-
-      ) : (
-        <h3>the book collection is empty.</h3>
-      )}
-</>
-        ) 
-      } }
+        <Button variant="primary" onClick={this.addBook}>
+          {" "}
+          Click Here to Add a book
+        </Button>
+        <FormModal
+          show={this.state.show}
+          close={this.handleClose}
+          handleSubmit={this.handleSubmit}
+        />
+        {this.state.books.length > 0 ? (
+          <Carousel>
+            {this.state.books.map((item) => {
+              return (
+                <Carousel.Item>
+                  <img
+                    className="d-block w-100"
+                    src="https://cdn2.teebooks.com/3568-large_default/wall-bookshelves-45-x-15-cm-set-of-2.jpg"
+                    alt="First slide"
+                  />
+                  <Carousel.Caption style={{ color: "black" }}>
+                    <h3>{item.title}</h3>
+                    <p>{item.description}</p>
+                    <p>{item.status}</p>
+                    <Button onClick={() => this.deleteBook(item._id)}>
+                      Delete This Book
+                    </Button>{" "}
+                    <span> </span>
+                    <Button>Update This Book</Button>
+                  </Carousel.Caption>
+                </Carousel.Item>
+              );
+            })}
+          </Carousel>
+        ) : (
+          <h3>the book collection is empty.</h3>
+        )}
+      </>
+    );
+  }
+}
 
 export default BestBooks;
