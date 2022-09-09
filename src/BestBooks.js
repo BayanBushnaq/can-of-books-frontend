@@ -3,13 +3,16 @@ import Button from "react-bootstrap/Button";
 import Carousel from "react-bootstrap/Carousel";
 import axios from "axios";
 import FormModal from "./FormModal";
+import UpdateBook from "./UpdateBook";
 
 class BestBooks extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       show: false,
+      showUpdate : false,
       books: [],
+      currentBook : {}
     };
   }
 
@@ -76,10 +79,49 @@ class BestBooks extends React.Component {
       });
   };
 
+  openUpdatehandler = (item)=>{
+    this.setState({
+      showUpdate : true,
+      currentBook : item
+    })
+    console.log(item)
+    
+  }
+
+  closeUpdatehandler=()=>{
+    this.setState({
+      showUpdate : false
+    })
+  }
+
+  UpdeteBookHandler=(event)=>{
+    event.preventDefault();
+    let obj = {
+      title : event.target.title.value,
+      description : event.target.description.value,
+      status : event.target.status.value
+    }
+    const id = this.state.currentBook._id;
+    axios
+    .put(`http://localhost:3010/updateBook/${id}`, obj)
+    .then(result=>{
+      this.setState({
+        books : result.data
+      })
+      this.closeUpdatehandler();
+    })
+    .catch(err=>{
+      console.log(err);
+    })
+    
+  }
+  
+
   render() {
     /* TODO: render all the books in a Carousel */
     return (
       <>
+      
         <Button variant="primary" onClick={this.addBook}>
           {" "}
           Click Here to Add a book
@@ -88,6 +130,14 @@ class BestBooks extends React.Component {
           show={this.state.show}
           close={this.handleClose}
           handleSubmit={this.handleSubmit}
+        />
+        <UpdateBook
+          showupdate={this.state.showUpdate} 
+          closeUpdate={this.closeUpdatehandler}
+          currentBook={this.state.currentBook}
+          UpdeteBookHandler={this.UpdeteBookHandler}
+          
+        
         />
         {this.state.books.length > 0 ? (
           <Carousel>
@@ -107,12 +157,13 @@ class BestBooks extends React.Component {
                       Delete This Book
                     </Button>{" "}
                     <span> </span>
-                    <Button>Update This Book</Button>
+                    <Button onClick={()=>this.openUpdatehandler(item)}>Update This Book</Button>
                   </Carousel.Caption>
                 </Carousel.Item>
               );
             })}
           </Carousel>
+          
         ) : (
           <h3>the book collection is empty.</h3>
         )}
