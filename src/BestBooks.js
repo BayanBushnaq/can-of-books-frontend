@@ -4,6 +4,7 @@ import Carousel from "react-bootstrap/Carousel";
 import axios from "axios";
 import FormModal from "./FormModal";
 import UpdateBook from "./UpdateBook";
+import { withAuth0 } from '@auth0/auth0-react';
 
 class BestBooks extends React.Component {
   constructor(props) {
@@ -119,13 +120,12 @@ class BestBooks extends React.Component {
 
   render() {
     /* TODO: render all the books in a Carousel */
+    // const {isAuthenticated,logout, } = useAuth0();
     return (
       <>
-      
-        <Button variant="primary" onClick={this.addBook}>
-          {" "}
-          Click Here to Add a book
-        </Button>
+      {/* /* {isAuthenticated &&  */} 
+     
+    
         <FormModal
           show={this.state.show}
           close={this.handleClose}
@@ -157,6 +157,10 @@ class BestBooks extends React.Component {
                       Delete This Book
                     </Button>{" "}
                     <span> </span>
+                    <Button variant="primary" onClick={this.addBook}  style={{marginLeft:20,marginRight:20}}>
+                     {" "}
+                    Click Here to Add a book
+                     </Button>
                     <Button onClick={()=>this.openUpdatehandler(item)}>Update This Book</Button>
                   </Carousel.Caption>
                 </Carousel.Item>
@@ -167,9 +171,17 @@ class BestBooks extends React.Component {
         ) : (
           <h3>the book collection is empty.</h3>
         )}
+
+
+
+      
+    
+      
+      
+        
       </>
     );
   }
 }
 
-export default BestBooks;
+export default withAuth0(BestBooks);

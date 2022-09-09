@@ -10,7 +10,8 @@ import {
 } from "react-router-dom";
 import Button from 'react-bootstrap/Button';
 import Profile from './About'
-
+import { withAuth0 } from '@auth0/auth0-react';
+import WELCOME from './WELCOME';
 
 
 
@@ -23,7 +24,10 @@ class App extends React.Component {
 
  
   render() {
+    const { isAuthenticated } = this.props.auth0;
     return (
+      
+      
       <>
         <Router>
           <Header />
@@ -31,13 +35,13 @@ class App extends React.Component {
             <Route 
               exact path="/"
               element= 
-              {
-              <BestBooks /> 
-              }
+              
+                {isAuthenticated ?   <BestBooks /> : <WELCOME />}
+            
             >
               <Route 
               exact path="/profile"
-              element= {<Profile/>}
+              element= { <Profile />}
               >
               </Route>
             </Route>
@@ -46,8 +50,9 @@ class App extends React.Component {
           <Footer />
         </Router>
       </>
+      
     )
   }
 }
 
-export default App;
+export default withAuth0(App);
